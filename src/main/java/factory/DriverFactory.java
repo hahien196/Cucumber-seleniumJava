@@ -1,6 +1,8 @@
 package factory;
 
 import java.time.Duration;
+
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -32,24 +34,27 @@ public class DriverFactory {
 		System.out.println("browser value is: " + browser);
 
 		if (browser.toLowerCase().equals("chrome")) {			
-			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
-	        options.addArguments("--headless");    
+			options.addArguments("--headless");
 	        options.addArguments("window-size=1366,768");
+	        options.addArguments("enable-automation");
+			WebDriverManager.chromedriver().setup();
 	        tlDriver.set(new ChromeDriver(options));
 	        
-		} else if (browser.toLowerCase().equals("firefox")) {			
-			WebDriverManager.firefoxdriver().setup();
+		} else if (browser.toLowerCase().equals("firefox")) {
 			FirefoxOptions options = new FirefoxOptions();
-	        options.addArguments("--headless");    
+			options.addArguments("--headless");
 	        options.addArguments("window-size=1366,768");
+	        options.addArguments("enable-automation");					
+			WebDriverManager.firefoxdriver().setup();
 	        tlDriver.set(new FirefoxDriver(options));
 	        
-		} else if (browser.toLowerCase().equals("edge")) {			
-			WebDriverManager.edgedriver().setup();
+		} else if (browser.toLowerCase().equals("edge")) {	
 			EdgeOptions options = new EdgeOptions();
-	        options.addArguments("--headless");    
+			options.addArguments("--headless");
 	        options.addArguments("window-size=1366,768");
+	        options.addArguments("enable-automation");		
+			WebDriverManager.edgedriver().setup();
 	        tlDriver.set(new EdgeDriver(options));
 	        
 		} else if (browser.toLowerCase().equals("safari")) {			
@@ -62,7 +67,7 @@ public class DriverFactory {
 		getDriver().manage().deleteAllCookies();
 		getDriver().manage().window().maximize();
 		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(CommonConst.IMPLICIT_WAIT_TIMEOUT));
-		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(CommonConst.PAGE_LOAD_TIMEOUT));
+//		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(CommonConst.PAGE_LOAD_TIMEOUT));
 		
 		return getDriver();
 

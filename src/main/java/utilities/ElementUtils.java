@@ -84,6 +84,9 @@ public class ElementUtils {
 	public boolean isElementDisplayed(By locator) {
 		return getElement(locator).isDisplayed();
 	}
+	public boolean isElementPresent(By locator) {
+		return driver.findElements(locator).size() > 0;
+	}
 	
 	public boolean isElementBehind(By locator) {
 		List<WebElement> eles = driver.findElements(locator);
@@ -158,7 +161,8 @@ public class ElementUtils {
 		}
 		for (int i = 0; i < CommonConst.PAGE_LOAD_TIMEOUT; i++) {
 			try {
-				Thread.sleep(1000);
+				driver.navigate().refresh();
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 			}
 			// To check page ready state.

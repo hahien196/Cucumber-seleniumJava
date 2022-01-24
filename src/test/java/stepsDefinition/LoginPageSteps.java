@@ -16,10 +16,8 @@ import common.CommonConst;
 public class LoginPageSteps {
 	public LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
 	public HomePage homePage = new HomePage(DriverFactory.getDriver());
-	ArrayList<List<String>> loginDatas;
-	int failCount = 0;
 	@Given("User is on Login page")
-	public void user_is_on_login_page() {
+	public void user_is_on_login_page() throws InterruptedException {
 		homePage.refresh();
 		homePage.clickLoginStart();
 		homePage.clickLogin();
@@ -48,7 +46,7 @@ public class LoginPageSteps {
 	public String verify_that_log_in_status_is(String loginStatus) throws InterruptedException {
 		String result = "Failed";
 		if (loginStatus.toLowerCase().equals("success")) {
-			Assert.assertFalse(loginPage.isLoginSuccess());
+			user_login_successfully();
 			result = "Passed";
 		} else {
 			Assert.assertTrue(loginPage.isLoginFailed());
@@ -58,15 +56,16 @@ public class LoginPageSteps {
 	}
 	
 	@Then("User login successfully")
-	public void user_login_successfully() throws InterruptedException {
-		Thread.sleep(1000);		
-		Boolean isDisplayed = DriverFactory.getDriver().findElements(By.xpath("(//button//*[text()='Login'])[2]")).size()>0;
+	public void user_login_successfully() throws InterruptedException {		
+		Boolean isDisplayed = loginPage.isLoginButtonDisplayed();
 		Assert.assertFalse(isDisplayed);
 	}
 	
 	@When("User login with data from excel with file name {string} and sheet name {string}")
 	public void doLoginWithDataFile(String fileName, String sheetName) throws IOException, InterruptedException {
 		XLUtility xlutil=new XLUtility(fileName, sheetName);
+		ArrayList<List<String>> loginDatas;
+		int failCount = 0;
 		loginDatas = xlutil.getData();	
 		loginDatas.get(0).add("Result");	// add Result column
 		
@@ -77,21 +76,14 @@ public class LoginPageSteps {
 	    	String status = data.get(2);
 	    	loginPage.doLogin(email, password);
 	    	String result = verify_that_log_in_status_is(status);
-	    	data.add(result);
-	    	if (status == "Success") {
+	    	if (status.equalsIgnoreCase("Success")) {
 		    	loginPage.logout();
 	    	}
 	    	if (result.equalsIgnoreCase("Failed")) {
 	    		failCount++;
 	    	}
+	    	data.add(result);
 		}
-//    	xlutil.writeDataToExcel(loginDatas);	
-//		Assert.assertTrue(failCount == 0);
-	}
-
-	@Then("Data result file is generated successfully with file name {string}_result and sheet name {string}")
-	public void data_result_file_is_generated(String fileName, String sheetName) throws IOException {
-		XLUtility xlutil=new XLUtility(fileName, sheetName);
     	xlutil.writeDataToExcel(loginDatas);	
 		Assert.assertTrue(failCount == 0);
 	}

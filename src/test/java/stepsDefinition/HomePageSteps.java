@@ -5,7 +5,7 @@ import io.cucumber.java.en.*;
 import pageObjects.LoginPage;
 import pageObjects.CataloguePage;
 import pageObjects.HomePage;
-import common.CommonConst; 
+import common.CommonConst;
 
 public class HomePageSteps {
 	public LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
@@ -14,11 +14,12 @@ public class HomePageSteps {
 //	private ProductDetailPage productDetailPage = new ProductDetailPage(DriverFactory.getDriver());
 	
 	@Given("User login successfully with default credentials")
-	public void user_login_successfully_with_default_credentials() {
+	public void user_login_successfully_with_default_credentials() throws InterruptedException {
 		homePage.clickLoginStart();
 		homePage.clickLogin();
 		loginPage.doLogin(CommonConst.DEFAULT_USERNAME, CommonConst.DEFAULT_PASSWORD);
-
+		loginPage.waitForLoginSuccessFully();
+		homePage.clickCloseChatFrame();
 	}
 	
 	@When("User go to Catalogue page")

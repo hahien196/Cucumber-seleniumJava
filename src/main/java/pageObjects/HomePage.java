@@ -26,9 +26,19 @@ public class HomePage {
 	private By btnConfirmLocation = By.xpath("//span[text()='Set location']/..");
 	private By btnBrowserCars = By.xpath("//p[text()='Browse cars']");
 	
+	By btnCloseChat = By.xpath("//div[@id='sp-close-frame']");
+	By btnSubmitChat = By.id("submitChat");
 	
-	public void clickLoginStart() {
+	public void clickCloseChatFrame() throws InterruptedException {
+		if (driver.findElements(btnSubmitChat).size() > 0) {
+			elementUtils.doClick(btnCloseChat);
+		}
+	}
+	
+	
+	public void clickLoginStart() throws InterruptedException {
 		elementUtils.checkPageIsReady();
+		clickCloseChatFrame();
 		elementUtils.doClick(btnLoginStart);
 	}
 	
