@@ -10,7 +10,7 @@ import io.cucumber.testng.CucumberOptions;
 				"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
 //				"timeline:test-output-thread/"
 				}, 
-		monochrome = true,
+//		tags = {"@login and not @checklist"}
 		glue = {"stepsDefinition"
 				, "appHooks" },
 		features = { "src/test/resources/features" }
